@@ -2,8 +2,15 @@ package paddlee
 
 class UrlMappings {
     static mappings = {
-        "/api/usuarios"(resources: 'usuario')
-        "/api/login"(controller: 'usuario', action: 'login', method: 'POST')
+        "/api/usuarios"(controller:'gestion', action: 'save', method: 'POST')
+        "/api/login"(controller: 'gestion', action: 'login', method: 'POST')
+        "/api/usuarios/$id"(controller: 'gestion', action: 'usuario', method: 'GET')
+        "/api/usuarios/$id"(controller: 'gestion', action: 'update', method: 'PUT')
+        "/api/usuarios/$id"(controller: 'gestion', action: 'delete', method: 'DELETE')
+        "/api/horarios"(controller: "gestion", action: "getHorarios", method: "GET")
+        "/api/canchas"(controller: "gestion", action: "getCanchas", method: "GET")
+        "/api/validarToken"(controller: "gestion", action: "validateRoleAndToken", method: "POST")
+
         "/$controller/$action?/$id?(.$format)?"{
             constraints {
                 // apply constraints here
