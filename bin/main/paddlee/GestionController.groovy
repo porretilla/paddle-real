@@ -43,25 +43,18 @@ GestionController() {
 
 
     // Acción para crear (guardar) un nuevo usuario
-def save() {
-    def requestBody = request.JSON
-    def aliasExistente = Usuario.findByAlias(requestBody.alias)
-
-    if (aliasExistente) {
-        // Si el alias ya está en uso, responder con status 409
-        render(status: 409, [message: "El alias ya está en uso"] as JSON)
-    } else {
-        def usuario = new Usuario(requestBody)
+    def save() {
+        def requestBody = request.JSON // Captura el cuerpo de la solicitud en JSON
+        def usuario = new Usuario(request.JSON) // Captura los datos del request en formato JSON
 
         if (usuario.save(flush: true)) {
             // Si el usuario se guarda correctamente
-            render usuario as JSON
+             render requestBody as JSON
         } else {
             // Si hay errores al crear el usuario
             render(status: 400, [message: "Error al crear el usuario", errors: usuario.errors] as JSON)
         }
     }
-}
 
     def usuario(Long id) {
         if (!id) {
