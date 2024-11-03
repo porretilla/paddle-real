@@ -134,14 +134,14 @@ def save() {
 // Acciòn que devuelve mock de horarios
     def getHorarios() {
         def mockHorarios = [
-            [horario_id: 1, fecha: "2024-09-23", hora: "10:00"],
-            [horario_id: 2, fecha: "2024-09-28", hora: "12:00"],
-            [horario_id: 3, fecha: "2024-09-30", hora: "14:00"],
-            [horario_id: 4, fecha: "2024-10-01", hora: "16:00"],
-            [horario_id: 5, fecha: "2024-10-04", hora: "18:00"],
-            [horario_id: 6, fecha: "2024-10-06", hora: "20:00"],
-            [horario_id: 7, fecha: "2024-10-09", hora: "22:00"],
-            [horario_id: 8, fecha: "2024-10-12", hora: "10:00"]
+            [horario_id: 1, fecha: "2024-11-23", hora: "10:00"],
+            [horario_id: 2, fecha: "2024-11-28", hora: "12:00"],
+            [horario_id: 3, fecha: "2024-11-30", hora: "14:00"],
+            [horario_id: 4, fecha: "2024-12-01", hora: "16:00"],
+            [horario_id: 5, fecha: "2024-12-04", hora: "18:00"],
+            [horario_id: 6, fecha: "2024-12-06", hora: "20:00"],
+            [horario_id: 7, fecha: "2024-12-09", hora: "22:00"],
+            [horario_id: 8, fecha: "2024-12-12", hora: "10:00"]
         ]
         render mockHorarios as JSON
     }

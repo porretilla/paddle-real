@@ -28,7 +28,7 @@ class Usuario {
         recontrasena(blank: false, password: true, maxSize: 255) // No puede estar vacía y debe cumplir con seguridad de contraseña
         genero(blank: false, inList: ["Masculino", "Femenino", "Otro"]) // Solo permite valores específicos
         direccion(nullable: true, maxSize: 255) // Es opcional pero si se proporciona no debe exceder el tamaño
-        tipoDeJuego(nullable: true, maxSize: 50) // Es opcional, tamaño máximo 50
+        tipoDeJuego(blank: false, maxSize: 50) // Es opcional, tamaño máximo 50
         telefono(nullable: true, matches: "\\d{10}") // Opcional, pero debe ser un número de 10 dígitos
         nivel(blank: false, inList: ["intermedio", "principiante", "avanzado"]) // Solo permite valores específicos
         alias blank: false, unique: true, validator: { val, obj ->
