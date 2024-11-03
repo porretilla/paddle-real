@@ -3,6 +3,7 @@ import grails.rest.RestfulController
 import grails.converters.JSON
 import grails.gorm.transactions.Transactional
 import grails.validation.ValidationException
+import io.jsonwebtoken.JwtException
 
 @Transactional
 class GestionController extends RestfulController<Usuario> {
@@ -159,39 +160,58 @@ def save() {
 
 
     // Valida el token y el role de usuario (idTipoUsuario)
-    def validateRoleAndToken() {
+      // Validate token and user role (idTipoUsuario)
+ def validateRoleAndToken() {
         def token = request.getHeader("Authorization")?.replace("Bearer ", "")
-        def idTipoUsuario = request.JSON.idTipoUsuario
-
+        //def idTipoUsuario = request.JSON.idTipoUsuario
+        Integer idTipoUsuario = (request.JSON.idTipoUsuario?.trim()) ? request.JSON.idTipoUsuario.toInteger() : null
+        println "tipo de usuario recibido: " + idTipoUsuario
+        
         if (!token) {
-            render(status: 401, message: 'Token es requerido')
+            render([message: 'Token es requerido', isValid: false] as JSON, status: 401)
             return
         }
         
         if (!idTipoUsuario) {
-            render(status: 400, message: 'idTipoUsuario es requerido')
+            render([message: 'idTipoUsuario es requerido', isValid: false] as JSON, status: 400)
             return
         }
 
         try {
-            def alias = jwtService.verifyToken(token)
+
+            // def jwtService = grailsApplication.mainContext.getBean('jwtService')
+            //     jwtService.getClass().methods.each { method ->
+            //         println method.name + " " + method.parameterTypes.collect { it.simpleName }.join(', ')
+            //     }
+            def isValid = jwtService.validateToken(token) // Call without the secret
+            println "es valido?:" + isValid
+            def alias = jwtService.getUsernameFromToken(token)
+            println "alias recuperado:" + alias
             def usuario = Usuario.findByAlias(alias)
-
+            println "contrasenia encontrada: " + usuario.contrasena
+            //println "idTipoUsuario de usuario:" + usuario.idTipoUsuario
+            println "idTipoUsuario de usuario: ${usuario?.idTipoUsuario}"
+            
+            //print "tipo valido :"  (usuario.idTipoUsuario != idTipoUsuario)
             if (!usuario) {
-                render(status: 404, message: 'Usuario no encontrado')
+                render([message: 'Usuario no encontrado', isValid: false] as JSON, status: 404)
                 return
             }
 
+            //print "idTipoUsuario de usuario:" + usuario.idTipoUsuario
             if (usuario.idTipoUsuario != idTipoUsuario) {
-                render(status: 403, message: 'Rol invalido')
-                return
+                render([message: 'Role no valido', isValid: false] as JSON, status: 403)
+               return
             }
 
-            render([message: 'Token y rol valido', usuario: usuario.alias] as JSON, status: 200)
+            render([message: 'Token y role Valido', isValid: true] as JSON, status: 200)
 
+        } catch (JwtException e) {
+            log.error("JWT validation failed: ${e.message}") // Log specific error message
+            render([message: 'Token no valido o el mismo ha expirado: ' + e.message, isValid: false] as JSON, status: 401)
         } catch (Exception e) {
-            render(status: 401, text: 'Token expirado o invalido: ' + e.message)
+            log.error("Unexpected error: ${e.message}") // Log unexpected errors
+            render([message: 'Error inesperado: ' + e.message, isValid: false] as JSON, status: 500)
         }
-
     }
 }
