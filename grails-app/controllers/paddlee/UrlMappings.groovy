@@ -2,7 +2,8 @@ package paddlee
 
 class UrlMappings {
     static mappings = {
-        "/api/usuarios"(controller:'gestion', action: 'save', method: 'POST')
+        "/api/usuarios"(controller:'gestion', action: 'getAllUsuarios', method: 'GET')
+        "/api/usuario"(controller:'gestion', action: 'save', method: 'POST')
         "/api/login"(controller: 'gestion', action: 'login', method: 'POST')
         "/api/usuario/$id"(controller: 'gestion', action: 'usuario', method: 'GET')
         "/api/usuario/$id"(controller: 'gestion', action: 'update', method: 'PUT')

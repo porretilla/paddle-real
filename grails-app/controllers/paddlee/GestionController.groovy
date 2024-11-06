@@ -14,6 +14,18 @@ GestionController() {
         super(Usuario)
     }
 
+//Obtiene todos los usuarios
+def getAllUsuarios() {
+        try {
+            
+            def usuarios = Usuario.list() 
+            respond usuarios, [status: 200] 
+        } catch (Exception e) {
+            
+            respond([error: 'A ocurrido un error al buscar todos los usuarios.'], status: 500)
+        }
+    }
+
 // Acción para iniciar sesión y generar el token JWT
    def login() {
     def alias = request.JSON.alias
@@ -63,7 +75,7 @@ def save() {
         }
     }
 }
-
+//buscar usuario de manera individual
     def usuario(Long id) {
         if (!id) {
             render(status: 400, message: 'Falta ID usuario')
